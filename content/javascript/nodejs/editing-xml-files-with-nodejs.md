@@ -2,12 +2,15 @@
 author: Elliot Forbes
 date: 2017-04-15T08:14:10+01:00
 series: nodejs
+desc: In this tutorial, we're going to be looking at how you can edit XML files using NodeJS
+image: node.png
 tags:
 - xml
 - javascript
 - nodejs
 title: Editing XML Files With NodeJS
 twitter: https://twitter.com/Elliot_F
+authorImage: https://pbs.twimg.com/profile_images/1028545501367554048/lzr43cQv_400x400.jpg
 ---
 
 <p>XML files are still widely used in enterprise programs and being able to manipulate xml files can be incredibly important.</p>

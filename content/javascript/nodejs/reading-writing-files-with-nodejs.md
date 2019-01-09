@@ -4,16 +4,18 @@ date: 2017-04-15T08:20:02+01:00
 desc: In this tutorial I’m going to be showing you exactly how we can read and write
   files on our local filesystem using NodeJS.
 series: nodejs
+image: node.png
 tags:
 - javascript
 - nodejs
 title: Reading and Writing Files With NodeJS
 twitter: https://twitter.com/Elliot_F
+authorImage: https://pbs.twimg.com/profile_images/1028545501367554048/lzr43cQv_400x400.jpg
 ---
 
 <p><strong>In this tutorial</strong> I’m going to be showing you exactly how we can read and write files on our local filesystem using NodeJS.</p>
 
-<h2 id=”reading-from-files”>Reading From Files</h2>
+# Reading From Files
 
 <p>Being able to read from files on your local file system can be hugely useful and there are a number of different things you can build on top of this. A log reader, importing information from spreadsheets and xml files or whatever you can think of, being able to read from files is hugely useful.</p>
 

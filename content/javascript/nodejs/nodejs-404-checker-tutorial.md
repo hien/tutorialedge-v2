@@ -4,11 +4,13 @@ date: 2018-03-11T14:08:54Z
 desc: In this tutorial, we are going to create a nice and simple 404 checker for a
   given page using NodeJS
 series: nodejs
+image: node.png
 tags:
 - nodejs
 - javascript
 title: NodeJS 404 Checker Tutorial
 twitter: https://twitter.com/Elliot_F
+authorImage: https://pbs.twimg.com/profile_images/1028545501367554048/lzr43cQv_400x400.jpg
 ---
 
 # Introduction

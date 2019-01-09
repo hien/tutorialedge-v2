@@ -4,12 +4,14 @@ date: 2017-04-15T08:26:02+01:00
 desc: In this tutorial I'll be showing you how you can execute terminal commands and
   shell scripts from within your nodejs application.
 series: nodejs
+image: node.png
 tags:
 - unix
 - javascript
 - nodejs
 title: Executing Shell Scripts With NodeJS
 twitter: https://twitter.com/Elliot_F
+authorImage: https://pbs.twimg.com/profile_images/1028545501367554048/lzr43cQv_400x400.jpg
 ---
 
 <p>One of the problems I’ve been faced with recently is how do I go about executing shell scripts using NodeJS. This essentially allows me to query the status of certain processes and utilize the full power of the unix shell commands. </p>

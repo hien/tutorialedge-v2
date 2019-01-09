@@ -10,17 +10,27 @@ tags:
 - express
 title: Getting Started with Typescript and Socket.Io - Tutorial
 twitter: https://twitter.com/Elliot_F
+authorImage: https://pbs.twimg.com/profile_images/1028545501367554048/lzr43cQv_400x400.jpg
 ---
 
-In this tutorial, we are going to be looking at how you can build a websocket based server using both TypeScript and Socket.io.
+> **Last Updated -** 24th December, 2018
 
-# Websockets
+Welcome friends! In this tutorial, we are going to be looking at how you can build a websocket based server using both TypeScript and Socket.io. 
 
-Websockets are an awesome technology and I absolutely love playing around with them and creating real-time applications. I've used them for quite a number of different applications now in combination with other frontend frameworks such as Angular and Vue.JS. 
+We'll be covering the following:
 
-Socket.io makes dealing with websockets a pleasurable and easy experience and the library is generally well supported regardless of what frontend framework you tend to run with.
+* What WebSockets are and why they are beneficial
+* Building a Simple TypeScript WebSocket Server
+* Building a Simple client to connect to our Server
+* Two-way communication between our client and our server
 
-In this tutorial, we'll be using `express` as the backend web framework that our Websocket API will integrate with.
+# WebSockets
+
+WebSockets are an awesome technology and I absolutely love playing around with them and creating real-time applications. I've used them for quite a number of different applications now in combination with other frontend frameworks such as Angular and Vue.JS. 
+
+Socket.io makes dealing with WebSockets a pleasurable and easy experience and the library is generally well supported regardless of what frontend framework you tend to run with.
+
+In this tutorial, we'll be using `ExpressJS` as the backend web framework that our Websocket API will sit on top of.
 
 > The full source code for this repo can be found here: [TutorialEdge/TypeScript](https://github.com/TutorialEdge/TypeScript)
 
@@ -33,16 +43,19 @@ Create a new file called `server.ts` within a `src/` directory and add the follo
 ```ts
 // src/server.ts
 import * as express from "express";
-import * as path from "path"
 
 const app = express();
 app.set("port", process.env.PORT || 3000);
 
 var http = require('http').Server(app);
 
+// simple '/' endpoint sending a Hello World 
+// response
 app.get('/', (req: any, res: any) => {
   res.send('hello world');
 });
+
+// start our simple server up on localhost:3000
 const server = http.listen(3000, function(){
   console.log('listening on *:3000');
 });
@@ -170,8 +183,128 @@ Now, when we run our `yarn run watch` command, it should start up our incredibly
 
 # Testing This Works
 
-> Under Construction
+Now that we've implemented the server, let's implement a really clean and simple `./client/index.html` page that we can serve. This will simply contain a single `<button />` element that, when hit, will `emit` a new `message` event to the WebSocket connection which simply contains `HELLO WORLD`:
+
+```html
+<!-- ./client/index.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body>
+  
+  <button onClick="sendMsg()">Hit Me</button>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js"></script>
+  <script>
+    const socket = io('http://localhost:3000');
+    
+    function sendMsg() {
+      socket.emit("message", "HELLO WORLD");
+    }
+  </script>
+</body>
+</html>
+```
+
+When we try and hit `http://localhost:3000` in our browser, we should see our `index.html` page rendering our button. We should see, in our server logs, that a new user has connected as we've triggered the `connection` event.
+
+## Listening for Messages
+
+So, in the above `index.html` we emit a `message` of `Hello World`. If we want to listen to this within our server, we can add the following code:
+
+```ts
+import * as express from "express";
+import * as socketio from "socket.io";
+import * as path from "path"
+
+const app = express();
+app.set("port", process.env.PORT || 3000);
+
+let http = require('http').Server(app);
+// set up socket.io and bind it to our
+// http server.
+let io = require('socket.io')(http);
+
+app.get('/', (req: any, res: any) => {
+  res.sendFile(path.resolve('./client/index.html'));
+});
+
+// whenever a user connects on port 3000 via
+// a websocket, log that a user has connected
+io.on('connection', function(socket: any){
+  console.log('a user connected');
+  // whenever we receive a 'message' we log it out
+  socket.on('message', function(message: any){
+    console.log(message);
+  });
+});
+
+
+const server = http.listen(3000, function(){
+  console.log('listening on *:3000');
+});
+```
+
+If we kill our server and restart, we should see that whenever our client's `<button/>` element is clicked, it will emit a `message` that will be logged out by our server side! 
+
+When we run this, and click the button a few times on our client-side, we should see the following log output on our server:
+
+```s
+$ node dist/server.js
+listening on *:3000
+a user connected
+HELLO WORLD
+HELLO WORLD
+HELLO WORLD
+```
+
+Awesome, we've managed to successfully send a message from our client to our WebSocket server using the socket-io package.
+
+# Two-Way Communication
+
+Now that we've got basic one-way communication up and running, let's try going back the way and send an echoed response from our server back to the client whenever it receives a message.
+
+We'll first have to add a listener on our client for new message events. Within the `<script/>` tag, let's add a new listener:
+
+```html
+<script>
+    const socket = io('http://localhost:3000');
+    // listen for new messages
+    socket.on("message", function(data) {
+      console.log(data);
+    });
+    // our sendMsg function...
+</script>
+```
+
+We can then add a call to `socket.emit()` in our `socket.on('message')` callback function that emit's the received message back down the WebSocket connection:
+
+```ts
+// ...
+io.on('connection', function(socket: any){
+  console.log('a user connected');
+  socket.on("message", function(message: any){
+    console.log(message);
+    // echo the message back down the 
+    // websocket connection
+    socket.emit('message', message);
+  });
+});
+```
+
+Perfect, now that we have that in place, we can test it out. Reload your browser page and make sure your server has recompiled/restarted successfully. 
+
+Notice how, whenever you click the button on your server, it now sends a message to our server, which is outputted in the logs. This message is then emitted back to the client and you should be able to see the same message outputted in the browser console. 
+
+> **Challenge -** Try modifying the message sent from the server back to the client. You should see this newly modified message being printed out only in your client's browser console.
 
 # Conclusion
 
 In this tutorial, we've successfully managed to create a socket.io TypeScript server that can be connected to using a frontend in order to display any real-time events you wish.
+
+> **Note -** If you want to keep track of when new articles are posted to the site, then please feel free to follow me on twitter for all the latest news: [@Elliot_F](https://twitter.com/elliot_f).

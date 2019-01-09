@@ -4,11 +4,13 @@ date: 2017-04-09T21:26:14+01:00
 desc: In this tutorial we discuss how to implement a very simple logging system using
   nodejs
 series: nodejs
+image: node.png
 tags:
 - javascript
 - nodejs
 title: Writing Your Own Logging System NodeJS
 twitter: https://twitter.com/Elliot_F
+authorImage: https://pbs.twimg.com/profile_images/1028545501367554048/lzr43cQv_400x400.jpg
 ---
 
 # Logging - Why Is It Important?

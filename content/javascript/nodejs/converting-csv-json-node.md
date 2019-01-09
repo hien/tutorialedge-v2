@@ -3,6 +3,7 @@ author: Elliot Forbes
 date: 2017-04-09T21:29:02+01:00
 desc: in this tutorial I'll be demonstrating how you can convert a csv file to JSON using NodeJS
 series: nodejs
+image: node.png
 tags:
 - csv
 - json
@@ -10,6 +11,7 @@ tags:
 - javascript
 title: Converting CSV to JSON using NodeJS
 twitter: https://twitter.com/Elliot_F
+authorImage: https://pbs.twimg.com/profile_images/1028545501367554048/lzr43cQv_400x400.jpg
 ---
 
 In this tutorial I’m going to be showing you how we can create a NodeJS script that takes in a csv file and outputs the contents of that CSV file as JSON.
